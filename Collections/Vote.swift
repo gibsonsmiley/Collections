@@ -14,8 +14,7 @@ class Vote: Equatable, FirebaseType {
     let postID: String
     let ownerID: String
     
-    init(id: String?, postID: String, ownerID: String) {
-        self.id = id
+    init(id: String? = nil, postID: String, ownerID: String) {
         self.postID = postID
         self.ownerID = ownerID
     }
@@ -39,6 +38,6 @@ class Vote: Equatable, FirebaseType {
     }
 }
 
-func ==(lhs: Post, rhs: Post) -> Bool {
+func ==(lhs: Vote, rhs: Vote) -> Bool {
     return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
 }

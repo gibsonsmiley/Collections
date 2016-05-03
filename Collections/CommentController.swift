@@ -11,11 +11,24 @@ import Foundation
 class CommentController {
     
     static func addCommentToPost(post: Post, text: String, completion: (success: Bool, post: Post?) -> Void) {
-        
+        guard let ownerID = UserController.sharedController.currentUser.id else { completion(success: false, post: nil); return }
+        if let id = post.id {
+            var comment = Comment(text: text, postID: id, ownerID: ownerID)
+            comment.save()
+            PostController.fetchPostForID(comment.postID, completion: { (post) in
+                completion(success: true, post: post)
+            })
+        } else {
+            completion(success: false, post: nil)
+            return
+        }
     }
     
-    static func deleteCommentForPost(post: Post, completion: (success: Bool) -> Void) {
-        
+    static func deleteCommentForPost(comment: Comment, completion: (success: Bool, post: Post?) -> Void) {
+        comment.delete()
+        PostController.fetchPostForID(comment.postID) { (post) in
+            completion(success: true, post: post)
+        }
     }
     
     static func editCommentOnPost(post: Post, newText: String?, completion: (success: Bool, newComment: Comment?) -> Void) {

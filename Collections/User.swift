@@ -15,15 +15,16 @@ class User: Equatable, FirebaseType {
     let username: String
     let bio: String?
     let url: String?
-    let collectionsIDs: [String]?
+    var collectionsIDs: [String]? = []
+    var postsIDs: [String]? = []
     
-    init(id: String, email: String, username: String, bio: String?, url: String?, collectionsIDs: [String]?) {
-        self.id = id
+    init(id: String?, email: String, username: String, bio: String?, url: String?, collectionsIDs: [String]? = [], postsIDs: [String]? = []) {
         self.email = email
         self.username = username
         self.bio = bio
         self.url = url
         self.collectionsIDs = collectionsIDs
+        self.postsIDs = postsIDs
     }
     
     private let emailKey = "email"
@@ -31,6 +32,7 @@ class User: Equatable, FirebaseType {
     private let bioKey = "bio"
     private let urlKey = "url"
     private let collectionsIDsKey = "collectionsIDs"
+    private let postsIDsKey = "postsIDs"
     
     var jsonValue: [String: AnyObject] {
         var json: [String: AnyObject] = [emailKey: email, usernameKey: username]
@@ -42,6 +44,9 @@ class User: Equatable, FirebaseType {
         }
         if let collectionsIDs = collectionsIDs {
             json.updateValue(collectionsIDs, forKey: collectionsIDsKey)
+        }
+        if let postsIDs = postsIDs {
+            json.updateValue(postsIDs, forKey: postsIDsKey)
         }
         return json
     }
@@ -60,9 +65,12 @@ class User: Equatable, FirebaseType {
         if let collectionsIDs = json[collectionsIDsKey] as? [String] {
             self.collectionsIDs = collectionsIDs
         }
+        if let postsIDs = json[postsIDsKey] as? [String] {
+            self.postsIDs = postsIDs
+        }
     }
 }
 
-func ==(lhs: Post, rhs: Post) -> Bool {
+func ==(lhs: User, rhs: User) -> Bool {
     return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
 }

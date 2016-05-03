@@ -31,7 +31,14 @@ class CollectionController {
     }
     
     static func fetchCollectionForID(id: String, completion: (collection: Collection?) -> Void) {
-        
+        FirebaseController.dataAtEndpoint("collections/\(id)") { (data) in
+            if let json = data as? [String: AnyObject] {
+                let collection = Collection(json: json, id: id)
+                completion(collection: collection)
+            } else {
+                completion(collection: nil)
+            }
+        }
     }
     
     static func fetchCollectionsForUser(user: User, completion: (collections: [Collection]?) -> Void) {

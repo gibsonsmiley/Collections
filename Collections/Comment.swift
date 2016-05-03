@@ -12,11 +12,10 @@ class Comment: Equatable, FirebaseType {
     
     var id: String?
     let text: String
-    let postID: String
-    let ownerID: String
+    var postID: String = ""
+    var ownerID: String = ""
     
-    init(id: String?, text: String, postID: String, ownerID: String) {
-        self.id = id
+    init(id: String? = nil, text: String, postID: String, ownerID: String) {
         self.text = text
         self.postID = postID
         self.ownerID = ownerID
@@ -44,6 +43,6 @@ class Comment: Equatable, FirebaseType {
     }
 }
 
-func ==(lhs: Post, rhs: Post) -> Bool {
+func ==(lhs: Comment, rhs: Comment) -> Bool {
     return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
 }
