@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 
 class FirebaseController {
-    static let base = Firebase(url: "https://justype.firebaseio.com")
+    static let base = Firebase(url: "https://collections0.firebaseio.com")
     
     static func dataAtEndpoint(endpoint: String, completion: (data: AnyObject?) -> Void) {
         let baseForEndpoint = FirebaseController.base.childByAppendingPath(endpoint)

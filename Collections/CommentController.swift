@@ -31,15 +31,26 @@ class CommentController {
         }
     }
     
-    static func editCommentOnPost(post: Post, newText: String?, completion: (success: Bool, newComment: Comment?) -> Void) {
-        
+    static func editCommentOnPost(comment: Comment, completion: (success: Bool, newComment: Comment?) -> Void) {
+        var comment = comment
+        comment.save()
+        completion(success: true, newComment: comment)
     }
     
-    static func fetchCommentForID(id: String, completion: (comment: Comment?) -> Void) {
-        
+    static func fetchCommentForID(post: Post, id: String, completion: (comment: Comment?) -> Void) {
+        guard let postID = post.id else { completion(comment: nil); return }
+        FirebaseController.dataAtEndpoint("posts/\(postID)/comments/\(id)") { (data) in
+            guard let json = data as? [String: AnyObject] else { completion(comment: nil); return }
+            let comment = Comment(json: json, id: id)
+            completion(comment: comment)
+        }
     }
     
     static func fetchCommentsForPost(post: Post, completion: (comments: [Comment]?) -> Void) {
-        
+        guard let postID = post.id else { completion(comments: nil); return }
+        PostController.fetchPostForID(postID) { (post) in
+            guard let comments = post?.comments else { completion(comments: nil); return }
+            completion(comments: comments)
+        }
     }
 }

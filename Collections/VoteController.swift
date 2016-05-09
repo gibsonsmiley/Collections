@@ -33,11 +33,20 @@ class VoteController {
         }
     }
     
-    static func fetchVoteForID(post: Post, user: User, id: String, completion: (vote: Vote?) -> Void) {
-        
+    static func fetchVoteForID(post: Post, id: String, completion: (vote: Vote?) -> Void) {
+        guard let postID = post.id else { completion(vote: nil); return }
+        FirebaseController.dataAtEndpoint("posts/\(postID)/votes/\(id)") { (data) in
+            guard let json = data as? [String: AnyObject] else { completion(vote: nil); return }
+            let vote = Vote(json: json, id: id)
+            completion(vote: vote)
+        }
     }
     
     static func fetchVotesForPost(post: Post, completion: (votes: [Vote]?) -> Void) {
-        
+        guard let postID = post.id else { completion(votes: nil); return }
+        PostController.fetchPostForID(postID) { (post) in
+            guard let votes = post?.votes else { completion(votes: nil); return }
+            completion(votes: votes)
+        }
     }
 }

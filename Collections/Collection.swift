@@ -14,10 +14,10 @@ class Collection: Equatable, FirebaseType {
     let name: String
     let description: String
     let timestamp: NSDate
-    let creatorID: String
+    var creatorID: String
     var postsIDs: [String]? = []
     
-    init(id: String?, name: String, description: String, timestamp: NSDate = NSDate(), creatorID: String, postsIDs: [String]? = []) {
+    init(id: String? = nil, name: String, description: String, timestamp: NSDate = NSDate(), creatorID: String, postsIDs: [String]? = []) {
         self.name = name
         self.description = description
         self.timestamp = timestamp
