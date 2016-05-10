@@ -369,6 +369,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="hxH-Bu-0Rv">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="userRefreshedTable:" destination="3VA-L3-6Hr" eventType="valueChanged" id="uuk-nJ-Bb7"/>
+                        </connections>
+                    </refreshControl>
                     <connections>
                         <segue destination="TRB-qB-62N" kind="presentation" identifier="toAuth" id="6Vp-Sn-YC7"/>
                     </connections>

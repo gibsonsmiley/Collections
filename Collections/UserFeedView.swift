@@ -8,15 +8,27 @@
 
 import UIKit
 
-class UserFeedView: UITableViewController {
+class UserFeedView: UITableViewController, PostCellDelegate {
 
     var usersFeed: [Post] = []
     
+    
+    // MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if UserController.sharedController.currentUser == nil {
             performSegueWithIdentifier("toAuth", sender: self)
+        } else {
+            let currentUser = UserController.sharedController.currentUser
+            if usersFeed.count > 0 {
+                loadFeedForUser(currentUser)
+            }
         }
     }
 
@@ -24,64 +36,73 @@ class UserFeedView: UITableViewController {
         super.didReceiveMemoryWarning()
         print("Memory warning on UserFeedView")
     }
-
-    // MARK: - Table view data source
-
+    
+    // MARK: - Methods
+    
+    func loadFeedForUser(user: User) {
+        PostController.fetchFeedForUser(user) { (posts) in
+            if let posts = posts {
+                self.usersFeed = posts
+                dispatch_async(dispatch_get_main_queue(), { 
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
+                })
+            } else {
+                self.refreshControl?.endRefreshing()
+            }
+        }
+    }
+    
+    func postVote(cell: PostCell, vote: Bool) {
+        if let indexPath = tableView.indexPathForCell(cell) {
+            let post = usersFeed[indexPath.row]
+            VoteController.userVotedForPost(post, completion: { (voted, onVote) in
+                if voted == true {
+                    guard let vote = onVote else { return }
+                    VoteController.deleteVoteOnPost(vote, completion: { (success, post) in
+                        if success == true {
+                            vote.delete()
+                        } else {
+                            print("Error deleting vote \(vote.id) on post.", #file, #line)
+                        }
+                    })
+                } else if voted == false {
+                    // Add vote
+                    VoteController.addVoteToPost(post, completion: { (success, post) in
+                        if success == true {
+                            print("SUCCESS!!")
+                        } else {
+                            print("Error adding vote on post.", #file, #line)
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func userRefreshedTable(sender: AnyObject) {
+        loadFeedForUser(UserController.sharedController.currentUser)
+    }
+    
+    // MARK: - Table View
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return usersFeed.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("postCell", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCellWithIdentifier("postCell", forIndexPath: indexPath) as! PostCell
+        let post = usersFeed[indexPath.row]
+        cell.updateWithPost(post)
+        cell.delegate = self
         return cell
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
     }
-    */
-
 }
