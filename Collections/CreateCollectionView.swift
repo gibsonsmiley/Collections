@@ -8,80 +8,114 @@
 
 import UIKit
 
-class CreateCollectionView: UITableViewController {
+class CreateCollectionView: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var headerButton: UIButton!
+    @IBOutlet weak var headerImageView: UIImageView!
+    
+    var name: String?
+    var collectionDescription: String?
+    var headerImage: UIImage?
+    var allCollections: [String] = []
+    var collectionIDs: [String] = []
+    
+    // MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        getCollections()
+        blackTextTint()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    
+    // MARK: - Methods
+    
+    func getCollections() {
+        CollectionController.fetchAllCollections { (collections) in
+            for collection in collections {
+                self.allCollections.append(collection.name)
+                self.collectionIDs.append(collection.id!)
+            }
+        }
     }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+    
+    // MARK: - Text Fields
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if nameTextField.editing == true {
+            guard let text = nameTextField.text else { return }
+            if allCollections.contains(text) {
+                nameTextField.textColor = UIColor.redColor()
+            } else {
+                nameTextField.textColor = UIColor.blackColor()
+            }
+        }
     }
-
-    /*
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    
+    func blackTextTint() {
+        nameTextField.tintColor = UIColor.blackColor()
+        descriptionTextField.tintColor = UIColor.blackColor()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        nameTextField.delegate = self
+        descriptionTextField.delegate = self
+        nameTextField.resignFirstResponder()
+        descriptionTextField.resignFirstResponder()
         return true
     }
-    */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    // MARK: - Image
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        self.headerImage = image
+        self.headerImageView.hidden = false
+        self.headerImageView.image = image
+        self.headerButton.setImage(nil, forState: .Normal)
+        self.headerLabel.hidden = true
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
+    
+    // MARK: - Buttons
+    
+    @IBAction func cancelButtonTapped(sender: AnyObject) {
+        nameTextField.resignFirstResponder()
+        descriptionTextField.resignFirstResponder()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    @IBAction func saveButtonTapped(sender: AnyObject) {
+        if let name = nameTextField.text,
+        description = descriptionTextField.text,
+            image = headerImage {
+            guard let id = UserController.sharedController.currentUser.id else { return }
+            CollectionController.createCollection(name, description: description, header: image, creatorID: id, timestamp: NSDate(), completion: { (success, collection) in
+                if collection != nil {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                } else {
+                    // It didn't work!
+                }
+            })
+        }
     }
-    */
 
+    @IBAction func photoButtonTapped(sender: AnyObject) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .PhotoLibrary
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 

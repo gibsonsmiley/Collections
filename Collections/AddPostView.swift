@@ -8,88 +8,145 @@
 
 import UIKit
 
-class AddPostView: UITableViewController {
+class AddPostView: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
+    @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var submitButton: UIBarButtonItem!
+    @IBOutlet weak var cameraButton: UIButton!
+    @IBOutlet weak var libraryButton: UIButton!
+    @IBOutlet weak var collectionTextField: UITextField!
+    @IBOutlet weak var captionTextField: UITextField!
+    @IBOutlet var tapGesture: UITapGestureRecognizer!
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    var image: UIImage?
+    var collection: Collection?
+    var caption: String?
+    var allCollections: [String] = []
+    var collectionIDs: [String] = []
+    
+    // MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        getCollections()
+        collectionTextField.delegate = self
+        blackTextTint()
+//        gestureCenter()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    
+    // MARK: - Text Field
+    
+    func blackTextTint() {
+        collectionTextField.tintColor = UIColor.blackColor()
+        captionTextField.tintColor = UIColor.blackColor()
     }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+//        collectionTextField.text = collection?.name
+//        caption = captionTextField.text
+        collectionTextField.delegate = self
+        captionTextField.delegate = self
+        collectionTextField.resignFirstResponder()
+        captionTextField.resignFirstResponder()
         return true
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+//        if collectionTextField.editing == true {
+        if collectionTextField.text != nil {
+            guard let text = collectionTextField.text else { return }
+            if allCollections.contains(text) {
+                collectionTextField.textColor = UIColor.blackColor()
+                errorLabel.hidden = true
+                guard let index = allCollections.indexOf(text) else { return }
+                let collectionsID = collectionIDs[index]
+                CollectionController.fetchCollectionForID(collectionsID, completion: { (collection) in
+                    guard let collection = collection else { return }
+                    self.collection = collection
+                    print(collection)
+                })
+            } else {
+                collectionTextField.textColor = UIColor.redColor()
+                errorLabel.hidden = false
+                errorLabel.text = "That collection doesn't exist yet. Make it first!"
+            }
+        } else {
+            errorLabel.hidden = false
+            errorLabel.text = "You need to select a collection to post this in."
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    
+    // MARK: - Collection
+    
+    func getCollections() {
+        CollectionController.fetchAllCollections { (collections) in
+            for collection in collections {
+                self.allCollections.append(collection.name)
+                self.collectionIDs.append(collection.id!)
+            }
+        }
+    }
+    
+    // MARK: - Image
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        self.image = image
+        photoImageView.image = image
+        self.cameraButton.hidden = true
+        self.libraryButton.hidden = true
+        photoImageView.hidden = false
+    }
+        
+    // MARK: - Button Actions
+    
+    @IBAction func cancelButtonTapped(sender: AnyObject) {
+        captionTextField.resignFirstResponder()
+        collectionTextField.resignFirstResponder()
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func submitButtonTapped(sender: AnyObject) {
+        if let image = image,
+            collection = collection {
+            errorLabel.hidden = true
+            PostController.createPostForUser(image, user: UserController.sharedController.currentUser, collection: collection, caption: self.captionTextField?.text, completion: { (success, post) in
+                if post != nil {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                } else {
+                    self.errorLabel.hidden = false
+                    self.errorLabel.text = "Something went wrong! Please try again."
+                    // It didn't work!
+                }
+            })
+        }
+    }
+    
+    @IBAction func cameraButtonTapped(sender: AnyObject) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .Camera
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    @IBAction func libraryButtonTapped(sender: AnyObject) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .PhotoLibrary
+        self.presentViewController(imagePicker, animated: true, completion: nil)
 
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
-
 }

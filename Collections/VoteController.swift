@@ -56,7 +56,7 @@ class VoteController {
             let ref = FirebaseController.base.childByAppendingPath("posts/\(postID)/votes/IDs") // I'm imagining this is jumping into the vote's [ID: AnyObject] dictionary
             ref.queryOrderedByChild("ownerID").queryEqualToValue("\(user.id)").observeSingleEventOfType(.Value, withBlock: { (snapshot) in // This is then jumping into each ID's dictionary to find a ownerID equal to the user's ID
                 print(snapshot)
-                guard let voteJSON = snapshot.value as? [String: AnyObject] else { return; completion(voted: false, onVote: nil) }
+                guard let voteJSON = snapshot.value as? [String: AnyObject] else { completion(voted: false, onVote: nil); return }
                 let votes = voteJSON.flatMap({Vote(json: $0.1 as! [String : AnyObject], id: $0.0)})
                 let vote = votes.first
                 if let voteID = vote?.id {

@@ -6,17 +6,24 @@
 //  Copyright © 2016 Gibson Smiley. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class CollectionController {
     
-    static func createCollection(name: String, description: String, creatorID: String, timestamp: NSDate = NSDate(), completion: (success: Bool, collection: Collection?) -> Void) {
+    static func createCollection(name: String, description: String, header: UIImage, creatorID: String, timestamp: NSDate = NSDate(), completion: (success: Bool, collection: Collection?) -> Void) {
         guard let user = UserController.sharedController.currentUser else { completion(success: false, collection: nil); return }
-        var collection = Collection(name: name, description: description, creatorID: creatorID)
-        collection.creatorID = creatorID
-        collection.save()
-        addCollectionToUser(user, collection: collection) { (success) in
-            completion(success: true, collection: collection)
+        ImageController.uploadImage(header) { (id) in
+            if let id = id {
+                var collection = Collection(name: name, description: description, imageEndpoint: id, creatorID: creatorID)
+                collection.creatorID = creatorID
+                collection.save()
+                addCollectionToUser(user, collection: collection) { (success) in
+                    completion(success: true, collection: collection)
+                }
+            } else {
+                print("Image couldn't be uploaded!", #file, #line)
+                completion(success: false, collection: nil)
+            }
         }
     }
     
@@ -86,5 +93,9 @@ class CollectionController {
                 })
             }
         }
+    }
+    
+    static func fetchCollectionByName() {
+        
     }
 }
