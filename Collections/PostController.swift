@@ -18,12 +18,25 @@ class PostController {
                     collectionID = collection.id else { return }
                 var post = Post(imageEndpoint: id, caption: caption, timestamp: timestamp, ownerUsername: user.username, ownerID: ownerID, collectionID: collectionID, comments: [], votes: [])
                 post.save()
+                addPostIDToUser(user, post: post, completion: { (success) in
+                    completion(success: true, post: post)
+                })
                 completion(success: true, post: post)
             } else {
                 completion(success: false, post: nil)
             }
         }
     }
+    
+    static func addPostIDToUser(user: User, post: Post, completion: (success: Bool) -> Void) {
+        guard let postID = post.id else { completion(success: false); return }
+        var user = user
+        user.postsIDs?.append(postID)
+        UserController.sharedController.currentUser = user
+        user.save()
+        completion(success: true)
+    }
+
     
     static func deletePostForUser(post: Post, user: User = UserController.sharedController.currentUser) {
         post.delete()
@@ -53,11 +66,17 @@ class PostController {
     
     static func fetchFeedForUser(user: User, completion: (posts: [Post]?) -> Void) {
         CollectionController.fetchCollectionsForUser(user) { (collections) in
+            var allPosts: [Post] = []
+            fetchPostsForUser(UserController.sharedController.currentUser, completion: { (posts) in
+                guard let posts = posts else { completion(posts: nil); return }
+                for post in posts {
+                allPosts.append(post)
+                }
+            })
             guard let collections = collections else { completion(posts: nil); return }
             for collection in collections {
                 fetchPostsForCollection(collection, completion: { (posts) in
                     guard let posts = posts else { completion(posts: nil); return }
-                    var allPosts: [Post] = []
                     for post in posts {
                         allPosts.append(post)
                         completion(posts: allPosts)

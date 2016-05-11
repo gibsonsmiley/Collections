@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionsView: UITableViewController, UISearchBarDelegate {
+class CollectionsView: UITableViewController, UISearchBarDelegate, CollectionCellDelegate {
     
     // MARK: - Properties
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -57,6 +57,10 @@ class CollectionsView: UITableViewController, UISearchBarDelegate {
         tableView.reloadData()
     }
     
+    func collectionAdded(cell: CollectionCell) {
+        
+    }
+    
     // MARK: - Actions
     
     @IBAction func indexChanged(sender: AnyObject) {
@@ -76,11 +80,17 @@ class CollectionsView: UITableViewController, UISearchBarDelegate {
     // MARK: - Table View
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if filteredCollections.count > 0 {
+            return filteredCollections.count
+        }
         return collections.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("collectionCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("collectionCell", forIndexPath: indexPath) as! CollectionCell
+        let collection = filteredCollections.count > 0 ? filteredCollections[indexPath.row] : collections[indexPath.row]
+        cell.updateWithCollection(collection)
+        cell.delegate = self
 
         return cell
     }

@@ -15,6 +15,7 @@ class CommentController {
         if let id = post.id {
             var comment = Comment(text: text, postID: id, ownerID: ownerID)
             comment.save()
+            post.comments.append(comment)
             PostController.fetchPostForID(comment.postID, completion: { (post) in
                 completion(success: true, post: post)
             })

@@ -14,18 +14,33 @@ class CollectionCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
     
+    var collection: Collection?
+    weak var delegate: CollectionCellDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
+        // If cell is selected, go to collection feed
     }
 
+    // MARK: - Methods
+    
+    func updateWithCollection(collection: Collection) {
+        self.nameLabel.text = collection.name
+        self.descriptionLabel.text = collection.description
+    }
+    
+    // MARK: - Actions
+    
     @IBAction func addButtonTapped(sender: AnyObject) {
         
     }
+}
+
+protocol CollectionCellDelegate: class {
+    func collectionAdded(cell: CollectionCell)
 }

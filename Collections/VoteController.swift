@@ -15,6 +15,7 @@ class VoteController {
         if let postID = post.id {
             var vote = Vote(postID: postID, ownerID: ownerID)
             vote.save()
+            post.votes.append(vote)
         } else {
             var post = post
             post.save()

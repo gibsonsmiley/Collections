@@ -12,11 +12,14 @@ class UserFeedView: UITableViewController, PostCellDelegate {
 
     var usersFeed: [Post] = []
     
-    
     // MARK: - View
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if UserController.sharedController.currentUser != nil {
+        loadFeedForUser(UserController.sharedController.currentUser)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

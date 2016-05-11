@@ -15,6 +15,7 @@ class User: Equatable, FirebaseType {
     let username: String
     let bio: String?
     let url: String?
+    let profileImageEndpoint: String?
     var collectionsIDs: [String]? = []
     var postsIDs: [String]? = []
     

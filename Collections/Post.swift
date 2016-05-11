@@ -17,8 +17,8 @@ class Post: Equatable, FirebaseType {
     let ownerUsername: String
     let ownerID: String
     let collectionID: String
-    let votes: [Vote]
-    let comments: [Comment]
+    var votes: [Vote]
+    var comments: [Comment]
     
     init(imageEndpoint: String, caption: String?, timestamp: NSDate = NSDate(), ownerUsername: String = "", ownerID: String, collectionID: String, comments: [Comment] = [], votes: [Vote] = [], id: String? = nil) {
         self.imageEndpoint = imageEndpoint
