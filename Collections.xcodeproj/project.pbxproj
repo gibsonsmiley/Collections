@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F0080BAA1CE3C269000FB4A1 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0080BA91CE3C269000FB4A1 /* CollectionCell.swift */; };
+		F0080BAC1CE3C27C000FB4A1 /* ProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0080BAB1CE3C27C000FB4A1 /* ProfileHeaderCell.swift */; };
+		F0080BAE1CE3C2A0000FB4A1 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0080BAD1CE3C2A0000FB4A1 /* ImageCell.swift */; };
 		F08FB3291CD81BA7002195B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FB3281CD81BA7002195B9 /* AppDelegate.swift */; };
 		F08FB32E1CD81BA7002195B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F08FB32C1CD81BA7002195B9 /* Main.storyboard */; };
 		F08FB3301CD81BA7002195B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F08FB32F1CD81BA7002195B9 /* Assets.xcassets */; };
@@ -40,6 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F0080BA91CE3C269000FB4A1 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
+		F0080BAB1CE3C27C000FB4A1 /* ProfileHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCell.swift; sourceTree = "<group>"; };
+		F0080BAD1CE3C2A0000FB4A1 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		F08FB3251CD81BA7002195B9 /* Collections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Collections.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F08FB3281CD81BA7002195B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F08FB32D1CD81BA7002195B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -91,6 +97,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F0080BA81CE3C247000FB4A1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F091C0C01CE14E1800282287 /* PostCell.swift */,
+				F0080BA91CE3C269000FB4A1 /* CollectionCell.swift */,
+				F0080BAB1CE3C27C000FB4A1 /* ProfileHeaderCell.swift */,
+				F0080BAD1CE3C2A0000FB4A1 /* ImageCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		F08FB31C1CD81BA7002195B9 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +130,7 @@
 			children = (
 				F08FB3281CD81BA7002195B9 /* AppDelegate.swift */,
 				F08FB32C1CD81BA7002195B9 /* Main.storyboard */,
+				F0080BA81CE3C247000FB4A1 /* Views */,
 				F0BD4FC31CDBE66800797F90 /* ViewControllers */,
 				F08FB34F1CD874F2002195B9 /* ModelControllers */,
 				F08FB3401CD81BCF002195B9 /* Models */,
@@ -167,7 +185,6 @@
 			children = (
 				F0959FAE1CDBBAD6008AC4FB /* AuthView.swift */,
 				F0959FA81CDBBA55008AC4FB /* UserFeedView.swift */,
-				F091C0C01CE14E1800282287 /* PostCell.swift */,
 				F0F9B1A01CE1239D00E4DFE9 /* AddPostView.swift */,
 				F0959FAA1CDBBA79008AC4FB /* CollectionsView.swift */,
 				F0F9B1A21CE123AF00E4DFE9 /* CreateCollectionView.swift */,
@@ -253,10 +270,13 @@
 				F08FB3461CD872AC002195B9 /* UserController.swift in Sources */,
 				F08FB3291CD81BA7002195B9 /* AppDelegate.swift in Sources */,
 				F08FB3481CD872C2002195B9 /* CollectionController.swift in Sources */,
+				F0080BAE1CE3C2A0000FB4A1 /* ImageCell.swift in Sources */,
 				F0F9B1A51CE123DD00E4DFE9 /* SettingsView.swift in Sources */,
 				F08FB34E1CD872F5002195B9 /* CommentController.swift in Sources */,
 				F08FB3511CD87668002195B9 /* ImageController.swift in Sources */,
 				F08FB34A1CD872D3002195B9 /* PostController.swift in Sources */,
+				F0080BAA1CE3C269000FB4A1 /* CollectionCell.swift in Sources */,
+				F0080BAC1CE3C27C000FB4A1 /* ProfileHeaderCell.swift in Sources */,
 				F08FB3531CD8E945002195B9 /* FirebaseController.swift in Sources */,
 				F0959FAD1CDBBA87008AC4FB /* ProfileView.swift in Sources */,
 				F08FB3441CD81CB0002195B9 /* Comment.swift in Sources */,

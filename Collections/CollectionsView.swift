@@ -8,11 +8,14 @@
 
 import UIKit
 
-class CollectionsView: UITableViewController {
+class CollectionsView: UITableViewController, UISearchBarDelegate {
     
     // MARK: - Properties
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var collections: [Collection] = []
+    var filteredCollections: [Collection] = []
     
     // MARK: - View Modes
     
@@ -26,13 +29,13 @@ class CollectionsView: UITableViewController {
     enum SegmentedViewMode: Int {
         case Mine = 0
         case All = 1
-        case Search = 2
     }
     
     // MARK: - View
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,6 +48,30 @@ class CollectionsView: UITableViewController {
     func arrivedFromAddPost() {
         fromView = .AddPost
     }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        CollectionController.fetchAllCollections { (collections) in
+            self.collections = collections
+        }
+        filteredCollections = collections.filter({String($0.name).lowercaseString.containsString(searchText.lowercaseString)})
+        tableView.reloadData()
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func indexChanged(sender: AnyObject) {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            SegmentedViewMode.Mine
+            setUpMine()
+        case 1:
+            SegmentedViewMode.All
+            setUpAll()
+        default:
+            break
+        }
+    }
+    
 
     // MARK: - Table View
     
@@ -53,7 +80,7 @@ class CollectionsView: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("collectionCell", forIndexPath: indexPath)
 
         return cell
     }
@@ -63,4 +90,22 @@ class CollectionsView: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
     }
+    
+    // MARK: - "Mine" View Mode
+    
+    func setUpMine() {
+        CollectionController.fetchCollectionsForUser(UserController.sharedController.currentUser) { (collections) in
+            guard let collections = collections else { return }
+            self.collections = collections
+        }
+    }
+    
+    // MARK: - "All" View Mode
+    
+    func setUpAll() {
+    CollectionController.fetchAllCollections { (collections) in
+        self.collections = collections
+        }
+    }
+
 }

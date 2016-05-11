@@ -115,18 +115,22 @@ class AddPostView: UITableViewController, UIImagePickerControllerDelegate, UINav
     }
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
-        if let image = image,
-            collection = collection {
-            errorLabel.hidden = true
-            PostController.createPostForUser(image, user: UserController.sharedController.currentUser, collection: collection, caption: self.captionTextField?.text, completion: { (success, post) in
-                if post != nil {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                } else {
-                    self.errorLabel.hidden = false
-                    self.errorLabel.text = "Something went wrong! Please try again."
-                    // It didn't work!
-                }
-            })
+        if image != nil || collectionTextField.text != nil {
+            if let image = image,
+                collection = collection {
+                errorLabel.hidden = true
+                PostController.createPostForUser(image, user: UserController.sharedController.currentUser, collection: collection, caption: self.captionTextField?.text, completion: { (success, post) in
+                    if post != nil {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    } else {
+                        self.errorLabel.hidden = false
+                        self.errorLabel.text = "Something went wrong! Please try again."
+                        // It didn't work!
+                    }
+                })
+            }
+        } else {
+            // Fields are empty
         }
     }
     

@@ -17,6 +17,7 @@ class CreateCollectionView: UITableViewController, UIImagePickerControllerDelega
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var headerButton: UIButton!
     @IBOutlet weak var headerImageView: UIImageView!
+    @IBOutlet weak var errorLabel: UILabel!
     
     var name: String?
     var collectionDescription: String?
@@ -55,8 +56,11 @@ class CreateCollectionView: UITableViewController, UIImagePickerControllerDelega
             guard let text = nameTextField.text else { return }
             if allCollections.contains(text) {
                 nameTextField.textColor = UIColor.redColor()
+                errorLabel.hidden = false
+                errorLabel.text = "Looks like that collection already exists."
             } else {
                 nameTextField.textColor = UIColor.blackColor()
+                errorLabel.hidden = true
             }
         }
     }
@@ -95,17 +99,22 @@ class CreateCollectionView: UITableViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        if let name = nameTextField.text,
-        description = descriptionTextField.text,
-            image = headerImage {
-            guard let id = UserController.sharedController.currentUser.id else { return }
-            CollectionController.createCollection(name, description: description, header: image, creatorID: id, timestamp: NSDate(), completion: { (success, collection) in
-                if collection != nil {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                } else {
-                    // It didn't work!
-                }
-            })
+        if nameTextField.text != nil || descriptionTextField.text != nil || headerImage != nil {
+            if let name = nameTextField.text,
+                description = descriptionTextField.text,
+                image = headerImage {
+                guard let id = UserController.sharedController.currentUser.id else { return }
+                CollectionController.createCollection(name, description: description, header: image, creatorID: id, timestamp: NSDate(), completion: { (success, collection) in
+                    if collection != nil {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    } else {
+                        self.errorLabel.hidden = false
+                        self.errorLabel.text = "Something went wrong! Please try again."
+                    }
+                })
+            }
+        } else {
+            // Fields are empty
         }
     }
 
