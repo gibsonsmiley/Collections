@@ -82,17 +82,27 @@ class CollectionController {
     }
     
     static func fetchCollectionsForUser(user: User, completion: (collections: [Collection]?) -> Void) {
-        FirebaseController.dataAtEndpoint("users/\(user.id)/collectionIDs") { (data) in
-            guard let collectionsIDs = data as? [String] else { completion(collections: nil); return }
-            var usersCollections: [Collection] = []
-            for collectionID in collectionsIDs {
-                fetchCollectionForID(collectionID, completion: { (collection) in
-                    guard let collection = collection else { completion(collections: nil); return }
-                    usersCollections.append(collection)
-                    completion(collections: usersCollections)
+        guard let id = user.id else { completion(collections: nil); return }
+        FirebaseController.base.childByAppendingPath("users/\(id)/collectionsIDs").observeEventType(.Value, withBlock: { (snapshot) in
+            var collections: [Collection] = []
+            if let collectionIDs = snapshot.value as? [String] {
+                let group = dispatch_group_create()
+                for collectionID in collectionIDs {
+                    dispatch_group_enter(group)
+                    CollectionController.fetchCollectionForID(collectionID, completion: { (collection) in
+                        if let collection = collection where !collections.contains(collection) {
+                            collections.append(collection)
+                        }
+                        dispatch_group_leave(group)
+                    })
+                }
+                dispatch_group_notify(group, dispatch_get_main_queue(), { 
+                    completion(collections: collections)
                 })
+            } else {
+                completion(collections: nil)
             }
-        }
+        })
     }
     
     static func fetchCollectionByName() {

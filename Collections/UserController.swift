@@ -6,7 +6,7 @@
 //  Copyright © 2016 Gibson Smiley. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class UserController {
     static let sharedController = UserController()
@@ -28,19 +28,21 @@ class UserController {
         }
     }
     
-    static func createUser(email: String, password: String, username: String, bio: String?, url: String?, completion: (success: Bool, user: User?) -> Void) {
+    static func createUser(email: String, password: String, username: String, bio: String?, url: String?, profileImage: UIImage?, completion: (success: Bool, user: User?) -> Void) {
         FirebaseController.base.createUser(email, password: password) { (error, response) in
             if let error = error {
                 print("\(error.localizedDescription)")
                 completion(success: false, user: nil)
             } else {
-                if let id = response["uid"] as? String {
-                    var user = User(id: id, email: email, username: username, bio: bio, url: url)
+                if let uid = response["uid"] as? String {
+                    ImageController.uploadImage(profileImage, completion: { (id) in
+                    var user = User(id: uid, email: email, username: username, bio: bio, url: url, profileImageEndpoint: id)
                     FirebaseController.base.childByAppendingPath("users").childByAppendingPath(id).setValue(user.jsonValue)
                     user.save()
                     authenticateUser(email, password: password, completion: { (success, user) in
                         completion(success: success, user: user)
                     })
+                })
                 } else {
                     completion(success: false, user: nil)
                 }

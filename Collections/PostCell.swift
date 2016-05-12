@@ -34,8 +34,12 @@ class PostCell: UITableViewCell {
 //        self.postImageView.image = nil    // Not sure what this does
         
         self.usernameButton.setTitle("\(post.ownerUsername)", forState: .Normal)
-        self.postCaption.text = "\(post.caption)"
-        self.commentButton.setTitle("\(post.comments.count)", forState: .Normal)
+        if let caption = post.caption {
+        self.postCaption.text = "\(caption)"
+        } else {
+            postCaption.hidden = true
+        }
+        self.commentButton.setTitle("\(post.comments.count) comments", forState: .Normal)
         self.voteCountLabel.text = "\(post.votes.count) votes"
         
         VoteController.userVotedForPost(post, completion: { (voted, onVote) in

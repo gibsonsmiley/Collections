@@ -109,7 +109,7 @@ class AuthView: UITableViewController, UITextFieldDelegate {
                 topLabel.text = "Fill all required fields to enter."
             } else {
                 // Create new account //
-                UserController.createUser(emailTextField.text!, password: passwordTextField.text!, username: usernameTextField.text!, bio: bioTextField?.text, url: urlTextField?.text, completion: { (success, user) in
+                UserController.createUser(emailTextField.text!, password: passwordTextField.text!, username: usernameTextField.text!, bio: bioTextField?.text, url: urlTextField?.text, profileImage: nil, completion: { (success, user) in
                     self.dismissViewControllerAnimated(true, completion: nil)
                 })
             }

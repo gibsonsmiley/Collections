@@ -19,11 +19,12 @@ class User: Equatable, FirebaseType {
     var collectionsIDs: [String]? = []
     var postsIDs: [String]? = []
     
-    init(id: String?, email: String, username: String, bio: String?, url: String?, collectionsIDs: [String]? = [], postsIDs: [String]? = []) {
+    init(id: String?, email: String, username: String, bio: String?, url: String?, profileImageEndpoint: String?, collectionsIDs: [String]? = [], postsIDs: [String]? = []) {
         self.email = email
         self.username = username
         self.bio = bio
         self.url = url
+        self.profileImageEndpoint = profileImageEndpoint
         self.collectionsIDs = collectionsIDs
         self.postsIDs = postsIDs
     }
@@ -32,6 +33,7 @@ class User: Equatable, FirebaseType {
     private let usernameKey = "username"
     private let bioKey = "bio"
     private let urlKey = "url"
+    private let profileImageKey = "profileImage"
     private let collectionsIDsKey = "collectionsIDs"
     private let postsIDsKey = "postsIDs"
     
@@ -42,6 +44,9 @@ class User: Equatable, FirebaseType {
         }
         if let url = url {
             json.updateValue(url, forKey: urlKey)
+        }
+        if let profileImageEndpoint = profileImageEndpoint {
+            json.updateValue(profileImageEndpoint, forKey: profileImageKey)
         }
         if let collectionsIDs = collectionsIDs {
             json.updateValue(collectionsIDs, forKey: collectionsIDsKey)
@@ -63,6 +68,7 @@ class User: Equatable, FirebaseType {
         self.username = username
         self.bio = json[bioKey] as? String
         self.url = json[urlKey] as? String
+        self.profileImageEndpoint = json[profileImageKey] as? String
         if let collectionsIDs = json[collectionsIDsKey] as? [String] {
             self.collectionsIDs = collectionsIDs
         }

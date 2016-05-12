@@ -67,22 +67,36 @@ class PostController {
     static func fetchFeedForUser(user: User, completion: (posts: [Post]?) -> Void) {
         CollectionController.fetchCollectionsForUser(user) { (collections) in
             var allPosts: [Post] = []
-            fetchPostsForUser(UserController.sharedController.currentUser, completion: { (posts) in
-                guard let posts = posts else { completion(posts: nil); return }
-                for post in posts {
-                allPosts.append(post)
-                }
-            })
-            guard let collections = collections else { completion(posts: nil); return }
+            let group = dispatch_group_create()
+//            dispatch_group_enter(group)
+//            fetchPostsForUser(UserController.sharedController.currentUser, completion: { (posts) in
+//                guard let posts = posts else {
+//                    completion(posts: nil); return }
+//                for post in posts {
+//                allPosts.append(post)
+//                }
+//                dispatch_group_leave(group)
+//            })
+            guard let collections = collections else {
+                completion(posts: nil); return }
             for collection in collections {
+                dispatch_group_enter(group)
                 fetchPostsForCollection(collection, completion: { (posts) in
                     guard let posts = posts else { completion(posts: nil); return }
                     for post in posts {
                         allPosts.append(post)
-                        completion(posts: allPosts)
                     }
+                    dispatch_group_leave(group)
                 })
             }
+            dispatch_group_notify(group, dispatch_get_main_queue(), {
+//                for posts in allPosts {
+//                    if $0 == $1 {
+//                        
+//                    }
+//                }
+                completion(posts: allPosts)
+            })
         }
     }
     
@@ -104,17 +118,39 @@ class PostController {
     
     static func fetchPostsForCollection(collection: Collection, completion: (posts:[Post]?) -> Void) {
         guard let collectionID = collection.id  else { completion(posts: nil); return }
-        CollectionController.fetchCollectionForID(collectionID) { (collection) in
-            guard let postsIDs = collection?.postsIDs else { completion(posts: nil); return }
-            var collectionsPosts: [Post] = []
-            for postID in postsIDs {
-                fetchPostForID(postID, completion: { (post) in
-                    guard let post = post else { completion(posts: nil); return }
-                    collectionsPosts.append(post)
-                    collectionsPosts.sortInPlace({$0.0.votes.count > $0.1.votes.count})
+        var collectionsPosts: [Post] = []
+        FirebaseController.base.childByAppendingPath("posts").queryOrderedByChild("collectionKey").queryEqualToValue(collectionID).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            if let postDictionaries = snapshot.value as? [String: AnyObject] {
+                let posts = postDictionaries.flatMap({Post(json: $0.1 as! [String: AnyObject], id: $0.0)})
+                let group = dispatch_group_create()
+                for post in posts {
+                    dispatch_group_enter(group)
+                    guard let id = post.id else { completion(posts: nil); return }
+                    fetchPostForID(id, completion: { (post) in
+                        guard let post = post else { completion(posts: nil); return }
+                        collectionsPosts.append(post)
+                        //collectionsPosts.sortInPlace({$0.0.votes.count > $0.1.votes.count})
+                        dispatch_group_leave(group)
+                    })
+                }
+                dispatch_group_notify(group, dispatch_get_main_queue(), { 
                     completion(posts: collectionsPosts)
                 })
             }
-        }
+        })
+        
+        
+//        CollectionController.fetchCollectionForID(collectionID) { (collection) in
+//            guard let postsIDs = collection?.postsIDs else { completion(posts: nil); return }
+//            var collectionsPosts: [Post] = []
+//            for postID in postsIDs {
+//                fetchPostForID(postID, completion: { (post) in
+//                    guard let post = post else { completion(posts: nil); return }
+//                    collectionsPosts.append(post)
+//                    collectionsPosts.sortInPlace({$0.0.votes.count > $0.1.votes.count})
+//                    completion(posts: collectionsPosts)
+//                })
+//            }
+//        }
     }
 }

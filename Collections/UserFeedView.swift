@@ -17,22 +17,17 @@ class UserFeedView: UITableViewController, PostCellDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if UserController.sharedController.currentUser != nil {
-        loadFeedForUser(UserController.sharedController.currentUser)
-        }
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
         if UserController.sharedController.currentUser == nil {
             performSegueWithIdentifier("toAuth", sender: self)
         } else {
             let currentUser = UserController.sharedController.currentUser
-            if usersFeed.count > 0 {
                 loadFeedForUser(currentUser)
-            }
         }
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {

@@ -10,8 +10,8 @@ import UIKit
 
 class ImageController {
     
-    static func uploadImage(image: UIImage, completion: (id: String?) -> Void) {
-        if let base64Image = image.base64String {
+    static func uploadImage(image: UIImage?, completion: (id: String?) -> Void) {
+        if let base64Image = image?.base64String {
             let base = FirebaseController.base.childByAppendingPath("images").childByAutoId()
             base.setValue(base64Image)
             completion(id: base.key)
