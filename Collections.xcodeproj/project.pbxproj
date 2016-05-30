@@ -11,6 +11,7 @@
 		F0080BAC1CE3C27C000FB4A1 /* ProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0080BAB1CE3C27C000FB4A1 /* ProfileHeaderCell.swift */; };
 		F0080BAE1CE3C2A0000FB4A1 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0080BAD1CE3C2A0000FB4A1 /* ImageCell.swift */; };
 		F061E01A1CFC9AE8003C8F81 /* PostCommentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F061E0191CFC9AE8003C8F81 /* PostCommentsTableViewController.swift */; };
+		F061E01C1CFCB329003C8F81 /* CollectionsPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F061E01B1CFCB329003C8F81 /* CollectionsPostsView.swift */; };
 		F08FB3291CD81BA7002195B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FB3281CD81BA7002195B9 /* AppDelegate.swift */; };
 		F08FB32E1CD81BA7002195B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F08FB32C1CD81BA7002195B9 /* Main.storyboard */; };
 		F08FB3301CD81BA7002195B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F08FB32F1CD81BA7002195B9 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 		F0080BAB1CE3C27C000FB4A1 /* ProfileHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCell.swift; sourceTree = "<group>"; };
 		F0080BAD1CE3C2A0000FB4A1 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		F061E0191CFC9AE8003C8F81 /* PostCommentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCommentsTableViewController.swift; sourceTree = "<group>"; };
+		F061E01B1CFCB329003C8F81 /* CollectionsPostsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionsPostsView.swift; sourceTree = "<group>"; };
 		F08FB3251CD81BA7002195B9 /* Collections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Collections.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F08FB3281CD81BA7002195B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F08FB32D1CD81BA7002195B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				F061E0191CFC9AE8003C8F81 /* PostCommentsTableViewController.swift */,
 				F0959FAA1CDBBA79008AC4FB /* CollectionsView.swift */,
 				F0F9B1A21CE123AF00E4DFE9 /* CreateCollectionView.swift */,
+				F061E01B1CFCB329003C8F81 /* CollectionsPostsView.swift */,
 				F0959FAC1CDBBA87008AC4FB /* ProfileView.swift */,
 				F0F9B1A41CE123DD00E4DFE9 /* SettingsView.swift */,
 			);
@@ -270,6 +273,7 @@
 			files = (
 				F0F9B1A31CE123AF00E4DFE9 /* CreateCollectionView.swift in Sources */,
 				F08FB3421CD81CAB002195B9 /* Vote.swift in Sources */,
+				F061E01C1CFCB329003C8F81 /* CollectionsPostsView.swift in Sources */,
 				F08FB3461CD872AC002195B9 /* UserController.swift in Sources */,
 				F08FB3291CD81BA7002195B9 /* AppDelegate.swift in Sources */,
 				F08FB3481CD872C2002195B9 /* CollectionController.swift in Sources */,

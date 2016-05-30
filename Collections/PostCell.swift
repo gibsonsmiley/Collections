@@ -63,7 +63,7 @@ class PostCell: UITableViewCell {
         }
     }
     
-    // MARK: - Button Actions
+    // MARK: - Actions
     
     @IBAction func usernameButtonTapped(sender: AnyObject) {
         // Go to user's profile

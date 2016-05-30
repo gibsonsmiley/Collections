@@ -618,11 +618,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P9n-54-CaR">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="124"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P9n-54-CaR">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uok-U6-xWS" userLabel="Add">
-                                            <rect key="frame" x="496" y="22" width="80" height="80"/>
+                                            <rect key="frame" x="514" y="31" width="62" height="62"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Uok-U6-xWS" secondAttribute="height" multiplier="1:1" id="BM1-hj-R7e"/>
                                                 <constraint firstAttribute="width" secondItem="Uok-U6-xWS" secondAttribute="height" multiplier="1:1" id="F7Z-K9-Jdg"/>
@@ -635,6 +635,7 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="F7Z-K9-Jdg"/>
+                                                    <exclude reference="H4B-jS-25D"/>
                                                 </mask>
                                             </variation>
                                             <connections>
@@ -648,8 +649,8 @@
                                             <nil key="highlightedColor"/>
                                             <color key="shadowColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Collection Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zr0-mr-jCu">
-                                            <rect key="frame" x="8" y="54" width="300" height="62"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection Description" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zr0-mr-jCu">
+                                            <rect key="frame" x="8" y="55" width="300" height="62"/>
                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="15"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -662,8 +663,10 @@
                                         <constraint firstItem="Uok-U6-xWS" firstAttribute="centerY" secondItem="kv4-ZO-aY9" secondAttribute="centerY" id="EzX-7K-fKM"/>
                                         <constraint firstItem="zr0-mr-jCu" firstAttribute="height" secondItem="kv4-ZO-aY9" secondAttribute="height" multiplier="1/2" id="GlI-ZG-eZB"/>
                                         <constraint firstItem="P9n-54-CaR" firstAttribute="top" secondItem="kv4-ZO-aY9" secondAttribute="top" id="I96-jA-1Mb"/>
+                                        <constraint firstItem="Uok-U6-xWS" firstAttribute="height" secondItem="kv4-ZO-aY9" secondAttribute="height" multiplier="1/2" id="Ijw-ja-jd8"/>
                                         <constraint firstItem="zr0-mr-jCu" firstAttribute="bottom" secondItem="kv4-ZO-aY9" secondAttribute="bottomMargin" id="Jx8-pS-7OW"/>
                                         <constraint firstItem="zr0-mr-jCu" firstAttribute="width" secondItem="kv4-ZO-aY9" secondAttribute="width" multiplier="1/2" id="L3t-OV-jCs"/>
+                                        <constraint firstItem="Uok-U6-xWS" firstAttribute="height" secondItem="P9n-54-CaR" secondAttribute="height" id="M8e-1V-oYF"/>
                                         <constraint firstAttribute="trailing" secondItem="P9n-54-CaR" secondAttribute="trailing" id="MFj-sg-UKC"/>
                                         <constraint firstItem="vF1-xd-UC0" firstAttribute="leading" secondItem="kv4-ZO-aY9" secondAttribute="leadingMargin" constant="8" id="WR2-Oo-fiD"/>
                                         <constraint firstItem="P9n-54-CaR" firstAttribute="leading" secondItem="kv4-ZO-aY9" secondAttribute="leading" id="beB-cG-gEs"/>
@@ -675,6 +678,7 @@
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="4KX-6K-BQ8"/>
+                                            <exclude reference="M8e-1V-oYF"/>
                                             <exclude reference="bgV-hr-348"/>
                                         </mask>
                                     </variation>
@@ -683,8 +687,9 @@
                                 <connections>
                                     <outlet property="addButton" destination="Uok-U6-xWS" id="Psa-wc-CRb"/>
                                     <outlet property="descriptionLabel" destination="zr0-mr-jCu" id="BPA-QI-bNJ"/>
+                                    <outlet property="headerImageView" destination="P9n-54-CaR" id="rPc-wp-0Hj"/>
                                     <outlet property="nameLabel" destination="vF1-xd-UC0" id="ipm-xy-Jb5"/>
-                                    <segue destination="zqI-Uj-IMn" kind="show" id="XeI-Gu-EcA"/>
+                                    <segue destination="zqI-Uj-IMn" kind="show" identifier="toCollection" id="XeI-Gu-EcA"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -714,6 +719,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="eta-0I-KQj">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="userRefreshed:" destination="muD-Mr-16Z" eventType="valueChanged" id="tKp-6C-M9d"/>
+                        </connections>
+                    </refreshControl>
                     <connections>
                         <outlet property="searchBar" destination="ca0-cr-fZv" id="oNN-7E-Dyo"/>
                         <outlet property="segmentedControl" destination="Akz-mN-66c" id="nSE-e9-Ejw"/>
@@ -1018,14 +1029,14 @@
         <!--Collection-->
         <scene sceneID="6AI-aH-w0C">
             <objects>
-                <tableViewController id="zqI-Uj-IMn" sceneMemberID="viewController">
+                <tableViewController id="zqI-Uj-IMn" customClass="CollectionsPostsView" customModule="Collections" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="733" sectionHeaderHeight="28" sectionFooterHeight="28" id="6nd-hY-j7E">
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="733" id="sw8-jJ-HlM">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="postCell" rowHeight="733" id="sw8-jJ-HlM" customClass="PostCell" customModule="Collections" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="600" height="733"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sw8-jJ-HlM" id="Cw6-Sz-HpG">
@@ -1142,6 +1153,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="MQv-nJ-8Mm">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="userRefreshed:" destination="zqI-Uj-IMn" eventType="valueChanged" id="e1c-Y9-kQv"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="phX-L9-GKD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1516,7 +1533,7 @@
         <image name="unvoted" width="528" height="528"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6Vp-Sn-YC7"/>
+        <segue reference="xbP-yy-mir"/>
         <segue reference="uSp-7s-tgd"/>
         <segue reference="RBf-J2-qR7"/>
         <segue reference="z5z-7x-Qkq"/>
