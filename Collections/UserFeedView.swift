@@ -23,6 +23,9 @@ class UserFeedView: UITableViewController, PostCellDelegate {
             let currentUser = UserController.sharedController.currentUser
                 loadFeedForUser(currentUser)
         }
+        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
 
     }
     

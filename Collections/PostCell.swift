@@ -16,6 +16,7 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var voteCountLabel: UILabel!
     @IBOutlet weak var voteButton: UIButton!
+    @IBOutlet weak var collectionButton: UIButton!
     
     var post: Post?
     weak var delegate: PostCellDelegate?
@@ -31,11 +32,16 @@ class PostCell: UITableViewCell {
     // MARK: - Methods
     
     func updateWithPost(post: Post) {
-//        self.postImageView.image = nil    // Not sure what this does
+        self.postImageView.image = nil
         
-        self.usernameButton.setTitle("\(post.ownerUsername)", forState: .Normal)
+        self.usernameButton.setTitle("@\(post.ownerUsername)", forState: .Normal)
+        CollectionController.fetchCollectionForID(post.collectionID) { (collection) in
+            guard let collection = collection?.name else { return }
+            self.collectionButton.setTitle("#\(collection)", forState: .Normal)
+
+        }
         if let caption = post.caption {
-        self.postCaption.text = "\(caption)"
+        self.postCaption.text = "\"\(caption)\""
         } else {
             postCaption.hidden = true
         }
@@ -61,6 +67,10 @@ class PostCell: UITableViewCell {
     
     @IBAction func usernameButtonTapped(sender: AnyObject) {
         // Go to user's profile
+    }
+    
+    @IBAction func collectionButtonTapped(sender: AnyObject) {
+        // Go to collection feed
     }
     
     @IBAction func commentButtonTapped(sender: AnyObject) {

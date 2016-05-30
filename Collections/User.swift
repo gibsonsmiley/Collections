@@ -58,6 +58,8 @@ class User: Equatable, FirebaseType {
     }
     var endpoint: String {
         return "users"
+        
+//        UserController.createUser(<#T##email: String##String#>, password: <#T##String#>, username: <#T##String#>, bio: <#T##String?#>, url: <#T##String?#>, profileImage: <#T##UIImage?#>, completion: <#T##(success: Bool, user: User?) -> Void#>)
     }
     
     required init?(json: [String : AnyObject], id: String) {

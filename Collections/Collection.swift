@@ -46,9 +46,9 @@ class Collection: Equatable, FirebaseType {
     }
     
     required init?(json: [String : AnyObject], id: String) {
-            guard let name = json[nameKey] as? String,
+        guard let name = json[nameKey] as? String,
             description = json[descriptionKey] as? String,
-                imageEndpoint = json[imageEndpointKey] as? String,
+            imageEndpoint = json[imageEndpointKey] as? String,
             timestamp = json[timestampKey] as? NSTimeInterval,
             creatorID = json[creatorIDKey] as? String else { return nil }
         self.id = id
